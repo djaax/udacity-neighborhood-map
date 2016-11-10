@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Neighborhood Map</title>
+
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- jQuery.js -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+	<!-- Materical Icons -->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<!-- Materialize.css -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+
+	<!-- Materialize.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
+	<!-- Knockout.js – Debug -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-debug.js"></script>
+
+	<!-- underscore.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+	
+	<!-- Style + Less -->
+	<link rel="stylesheet/less" type="text/css" href="style.less">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.1/less.min.js"></script>
+
+	<!-- app.js -->
+	<script src="app.js"></script>
+
+</head>
+<body>
+
+<nav>
+	<div class="nav-wrapper white">
+		<a href="#" class="brand-logo">Neighborhood Map</a>
+		<a href="#" id="show-menu" class="button-collapse"><i class="material-icons">menu</i></a>
+	</div>
+</nav>
+
+<div class="wrapper">
+	<div id="sidebar" data-bind="visible: venues().length">
+		<input type="text" data-bind="textInput: searchQuery" placeholder="Search" autocomplete="off" />
+		<div class="collection" data-bind="foreach: filteredVenues">
+			<a href="#!" class="collection-item" data-bind="text: venue.name, click: $root.showVenue"></a>
+		</div>
+		<span class="empty" data-bind="visible: !filteredVenues().length">Sorry, no items found</span>
+	</div>
+	<div id="gmap">
+	    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQXn2cvsUY1K2RDHM-kZlu9JJcRzaQ-a4&callback=initMap"></script>
+	    </div>
+</div>
+
+</body>
+</html>
