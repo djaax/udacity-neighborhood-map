@@ -13,7 +13,6 @@ function initMap() {
 }
 
 function initMapError() {
-	console.log(err);
 	alert('Sorry, an error occured on Google Maps. Please check your network connection.');
 }
 
