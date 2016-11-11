@@ -1,13 +1,3 @@
-$(function() {
-	$('#show-menu').click(function() {
-		if ( $('#sidebar').is(':visible') ) {
-			$('#sidebar').hide();
-		} else {
-			$('#sidebar').show();
-		}
-	});
-});
-
 var lat = 51.9606649;
 var lon = 7.6261347;
 
@@ -22,18 +12,20 @@ function initMap() {
     bootstrap();
 }
 
+function initMapError() {
+	console.log(err);
+	alert('Sorry, an error occured on Google Maps. Please check your network connection.');
+}
+
 /*global ko, Router */
 function bootstrap() {
 	'use strict';
 
-	// Location
 	window.infoWindow = new google.maps.InfoWindow();
 	var Venue = function(data) {
 		var self = this;
 		this.venue = data.venue;
 		this.photo = data.photo;
-
-		console.log('data', data);
 
 		this.drawMarker = function() {
 			// Create a marker and set its position.
@@ -45,7 +37,7 @@ function bootstrap() {
 				},
 				title: this.venue.name
 		    });
-		}
+		};
 
 		this.hideMarker = function() {
 			this.marker.setMap(null);
@@ -56,16 +48,20 @@ function bootstrap() {
 		}.bind(this);
 
 		this.showInfowindow = function() {
+			self.marker.setAnimation(google.maps.Animation.BOUNCE);
+			setTimeout(function() {
+				self.marker.setAnimation(null);
+			}, 1400);
+
+			var name = self.venue ? self.venue.name : 'No name available';
+			var rating = self.venue ? self.venue.rating : 'No rating available';
+
 			var w = window.infoWindow;
 			w.setContent(
 				'<div class="content">'+
 				'<img src="'+self.photo.prefix+'150x70'+self.photo.suffix+'"/>' +
-				'<div class="name">Name: '+
-				self.venue.name +
-				'</div>' +
-				'<div class="rating">Rating: '+
-				self.venue.rating +
-				'</div>' +
+				'<div class="name">Name: '+name+'</div>' +
+				'<div class="rating">Rating: '+rating+'</div>' +
 				'</div>'
 				);
 			w.open(gmap, self.marker);
@@ -104,7 +100,7 @@ function bootstrap() {
 			// Remove all markers
 			_.each(this.venues(), function(v) {
 				v.hideMarker();
-			})
+			});
 			
 			// Show filtered markers
 			_.each(filtered, function(venue) {
@@ -120,6 +116,14 @@ function bootstrap() {
 				$('#sidebar').hide();
 			}
 		}.bind(this);
+
+		this.showMenu = function() {
+			if ( $('#sidebar').is(':visible') ) {
+				$('#sidebar').hide();
+			} else {
+				$('#sidebar').show();
+			}
+		}
 	};
 
 	/*
@@ -165,15 +169,6 @@ function bootstrap() {
 		});
 	}
 
-	/*/
-	getVenuesByLocation(function(err, venues) {
-		if ( err ) throw err;
-
-		// bind a new instance of our view model to the page
-		var viewModel = new ViewModel(venues || []);
-		ko.applyBindings(viewModel);
-	});
-	/*/
 	getVenuesByList('58244f93133863578b9acb55', function(err, venues) {
 		if ( err ) {
 			console.log(err);
@@ -184,9 +179,4 @@ function bootstrap() {
 		var viewModel = new ViewModel(venues || []);
 		ko.applyBindings(viewModel);
 	});
-	/**/
-
-	// set up filter routing
-	/*jshint newcap:false */
-	//Router({ '/:filter': viewModel.showMode }).init();
 };
